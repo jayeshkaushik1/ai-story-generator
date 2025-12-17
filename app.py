@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
 from captioning import generate_caption
-from story_perplexity import generate_story_from_caption
+from story_gemini import generate_story_from_caption
 
 st.set_page_config(page_title="AI Story Generator", page_icon="📖", layout="wide")
 
@@ -33,7 +33,7 @@ if st.button("Generate Story", type="primary", disabled=uploaded_file is None):
             caption = generate_caption(image_bytes)
             st.info(f"Detected caption: **{caption}**")
 
-        with st.spinner("Generating story with Perplexity Sonar..."):
+        with st.spinner("Generating story with Google Gemini Sonar..."):
             story = generate_story_from_caption(caption, user_prompt, theme)
 
         st.subheader("Generated Story")
