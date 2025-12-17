@@ -1,8 +1,7 @@
 # app.py
 import streamlit as st
 from captioning import generate_caption
-from story_gemini import generate_story_from_caption
-
+from story_perplexity import generate_story_from_caption
 st.set_page_config(page_title="AI Story Generator", page_icon="📖", layout="wide")
 
 st.title("📖 Image-based AI Story Generator")
