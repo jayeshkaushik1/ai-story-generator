@@ -1,15 +1,11 @@
-# story_perplexity.py
+# story_gemini.py
 import os
-from openai import OpenAI
+import google.generativeai as genai
 
-# Using Perplexity's OpenAI-compatible API
-PPLX_API_KEY = os.getenv("PERPLEXITY_API_KEY")
-PPLX_BASE_URL = "https://api.perplexity.ai"
+# Using Google Gemini API
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-client = OpenAI(
-    api_key=PPLX_API_KEY,
-    base_url=PPLX_BASE_URL,
-)
+genai.configure(api_key=GEMINI_API_KEY)
 
 SYSTEM_PROMPT = (
     "You are a creative story generator. "
@@ -18,25 +14,17 @@ SYSTEM_PROMPT = (
 )
 
 def generate_story_from_caption(caption: str, user_prompt: str, theme: str) -> str:
-    """Generate a story from an image caption using Perplexity Sonar."""
+    """Generate a story from an image caption using Google Gemini."""
     full_prompt = (
         f"Image caption: {caption}\n\n"
         f"Theme: {theme}\n\n"
         f"User instructions: {user_prompt}\n\n"
+        f"{SYSTEM_PROMPT}\n\n"
         "Write a detailed story (600-1000 words) that fits the theme, "
         "is imaginative, and easy to understand."
     )
 
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": full_prompt},
-    ]
-
-    resp = client.chat.completions.create(
-        model="sonar-pro",
-        messages=messages,
-        max_tokens=1200,
-        temperature=0.9,
-    )
-
-    return resp.choices[0].message.content
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    response = model.generate_content(full_prompt)
+    
+    return response.text
